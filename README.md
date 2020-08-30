@@ -12,10 +12,13 @@ Python 3.7 +
     ```
 1. connect to chat
     ```python
-    my_chat = join_chat(oath='do not share', bot_name='test', channel_name='0815_truppe')
+    my_chat = TwitchChat(oath='do not share', bot_name='test', channel_name='0815_truppe')
+    my_chat_listen_only = TwitchChat(channel_name='0815_truppe')
     ```
 1. send or receive message
     ```python
-   my_chat.send_to_chat('hi')   
-   user, message = my_chat.listen_to_chat()    
+   while True: 
+       user, message = my_chat.listen_to_chat()   
+       # do something
+       my_chat.send_to_chat('hi')  # raises Error with my_chat_listen_only  
    ```
