@@ -3,7 +3,7 @@ from socket import socket
 
 class TwitchChat:
 
-    def __init__(self, channel_name: str, oath: str = None, bot_name: str = None):
+    def __init__(self, channel_name: str, bot_name: str, oath: str = None):
         # these may change in the future
         server = 'irc.twitch.tv'
         port = 6667
@@ -12,12 +12,12 @@ class TwitchChat:
         self.channel = channel_name
         self.socket.connect((server, port))
 
-        self.allowed_to_post = oath and bot_name
+        self.allowed_to_post = oath or bot_name
 
         if self.allowed_to_post:
             self.socket.send(f'PASS oauth:{oath}\nNICK {bot_name}\n Join #{channel_name}\n'.encode())
         else:
-            self.socket.send(f"NICK justinfan0\n".encode('utf-8'))
+            self.socket.send(f"NICK {bot_name}\n".encode('utf-8'))
             self.socket.send(f"JOIN #{channel_name}\n".encode('utf-8'))
 
         loading = True

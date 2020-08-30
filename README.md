@@ -13,7 +13,7 @@ Python 3.6 +
 1. connect to chat
     ```python
     my_chat = TwitchChat(oath='do not share', bot_name='test', channel_name='0815_truppe')
-    my_chat_listen_only = TwitchChat(channel_name='0815_truppe')
+    my_chat_listen_only = TwitchChat(channel_name='0815_truppe', bot_name='test')
     ```
 1. send or receive message
     ```python
