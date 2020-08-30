@@ -2,7 +2,7 @@
 a simple way to connect, send and receive messanges from Twitch chat
 
 ## Requirements
-Python 3.7 +
+Python 3.6 +
 
 ## Usage
 1. download twitch_chat.py
