@@ -10,15 +10,14 @@ Python 3.6 +
     ```python
     from twitch_chat import join_chat
     ```
-1. connect to chat
+1. connect to chat with Token from https://twitchapps.com/tmi/
     ```python
     my_chat = TwitchChat(oath='do not share', bot_name='test', channel_name='0815_truppe')
-    my_chat_listen_only = TwitchChat(channel_name='0815_truppe', bot_name='test')
     ```
 1. send or receive message
     ```python
    while True: 
        user, message = my_chat.listen_to_chat()   
        # do something
-       my_chat.send_to_chat('hi')  # raises Error with my_chat_listen_only  
+       my_chat.send_to_chat('hi')  
    ```

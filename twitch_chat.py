@@ -3,7 +3,7 @@ from socket import socket
 
 class TwitchChat:
 
-    def __init__(self, channel_name: str, bot_name: str, oath: str = None):
+    def __init__(self, channel_name: str, bot_name: str, oath: str):
         # these may change in the future
         server = 'irc.twitch.tv'
         port = 6667
@@ -12,13 +12,7 @@ class TwitchChat:
         self.channel = channel_name
         self.socket.connect((server, port))
 
-        self.allowed_to_post = oath or bot_name
-
-        if self.allowed_to_post:
-            self.socket.send(f'PASS oauth:{oath}\nNICK {bot_name}\n Join #{channel_name}\n'.encode())
-        else:
-            self.socket.send(f"NICK {bot_name}\n".encode('utf-8'))
-            self.socket.send(f"JOIN #{channel_name}\n".encode('utf-8'))
+        self.socket.send(f'PASS oauth:{oath}\nNICK {bot_name}\n Join #{channel_name}\n'.encode())
 
         loading = True
         while loading:
@@ -28,6 +22,8 @@ class TwitchChat:
             for line in read_buffer_join.split('\n')[0:-1]:
                 # checks if loading is complete
                 loading = 'End of /NAMES list' not in line
+                if 'Login authentication failed' in line:
+                    raise RuntimeError('Twitch authentication failed')
 
     def send_to_chat(self, message: str):
         """
@@ -36,12 +32,8 @@ class TwitchChat:
         :param message: message to send in twitch chat
         :return:
         """
-
-        if self.allowed_to_post:
-            message_temp = f'PRIVMSG #{self.channel} :{message}'
-            self.socket.send(f'{message_temp}\n'.encode())
-        else:
-            raise RuntimeError('Bot has no permission to sent messages get oath token at http://twitchapps.com/tmi/')
+        message_temp = f'PRIVMSG #{self.channel} :{message}'
+        self.socket.send(f'{message_temp}\n'.encode())
 
     def listen_to_chat(self) -> (str, str):
         """
